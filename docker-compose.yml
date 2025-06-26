@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  nestjs:
+    build: .
+    container_name: nestjs-app
+    ports:
+      - "${PORT_NESTJS}:${PORT_NESTJS}"
+    networks:
+      - monitoring
+    environment:
+      - NODE_ENV=${NODE_ENV}
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "${PORT_PROMETHEUS}:${PORT_PROMETHEUS}"
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "${PORT_GRAFANA}:3000"
+    networks:
+      - monitoring
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    depends_on:
+      - prometheus
+
+networks:
+  monitoring:
+    driver: bridge
