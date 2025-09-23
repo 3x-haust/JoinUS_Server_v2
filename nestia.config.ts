@@ -21,5 +21,9 @@ const NESTIA_CONFIG: INestiaConfig = {
     beautify: true,
   },
   output: 'src/api',
+  clone: true,
+  simulate: true,
+  e2e: 'test',
+  distribute: 'packages/api',
 };
 export default NESTIA_CONFIG;
