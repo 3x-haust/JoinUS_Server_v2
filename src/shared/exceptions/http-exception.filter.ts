@@ -21,7 +21,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const message =
       exception instanceof HttpException
-        ? exception.getResponse()
+        ? typeof exception.getResponse() === 'object' &&
+          exception.getResponse() !== null
+          ? (exception.getResponse() as { message?: string }).message
+          : exception.message
         : '서버 오류가 발생했습니다.';
 
     response.status(status).json({

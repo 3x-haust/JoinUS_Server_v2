@@ -6,13 +6,18 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class ResponseInterceptor<T = any> implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp();
+    const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
+
+    if (request.url.includes('/metrics')) {
+      return next.handle();
+    }
 
     return next.handle().pipe(
       map((data: T) => ({
