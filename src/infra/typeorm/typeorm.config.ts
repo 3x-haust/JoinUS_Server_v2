@@ -2,7 +2,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '../../config/config.service';
 import { Club } from '../../clubs/entities/club.entity';
 import { User } from '../../users/entities/user.entity';
-// import { Log } from '../../logs/entities/log.entity';
+import { Log } from '../../logs/entities/log.entity';
 
 export const typeOrmConfig = (
   configService: ConfigService,
@@ -13,8 +13,8 @@ export const typeOrmConfig = (
   username: configService.databaseUser,
   password: configService.databasePassword,
   database: configService.databaseName,
-  entities: [Club, User],
-  synchronize: false,
+  entities: [Club, User, Log],
+  synchronize: true,
   migrationsRun: true,
   logging: false,
   migrations: [__dirname + '/../../migrations/*{.ts,.js}'],
