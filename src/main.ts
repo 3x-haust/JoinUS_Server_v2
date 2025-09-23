@@ -4,10 +4,14 @@ import { ConfigService } from '@nestjs/config';
 import { NestiaSwaggerComposer } from '@nestia/sdk';
 import { SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app: INestApplication = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
+  app.use(cookieParser());
+
+  app.setGlobalPrefix('api/v2');
 
   const document = await NestiaSwaggerComposer.document(app, {
     openapi: '3.1',
